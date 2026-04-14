@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Metaverso Rafael - Reconstrucción Total</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <a-asset-item id="glb1" src="glb1.glb"></a-asset-item>
+        <a-asset-item id="glb2" src="glb2.glb"></a-asset-item>
+        <a-asset-item id="glb3" src="glb3.glb"></a-asset-item>
+        <a-asset-item id="glb4" src="glb4.glb"></a-asset-item>
+      </a-assets>
+
+      <a-sky color="#87CEEB"></a-sky>
+      <a-plane position="0 -0.5 0" rotation="-90 0 0" width="10000" height="10000" color="#C2B280"></a-plane>
+
+      <a-cone color="#D2B48C" height="20" radius-bottom="20" position="0 10 0"
+              animation="property: position; to: 0 12 0; dir: alternate; dur: 3000; loop: true">
+      </a-cone>
+
+      <a-torus color="#FFD700" radius="2" radius-tubular="0.1" position="-5 2 -15"
+               animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"></a-torus>
+      
+      <a-torus color="#00FFFF" radius="2" radius-tubular="0.1" position="5 2 -15"
+               animation="property: rotation; to: 0 -360 0; loop: true; dur: 5000"></a-torus>
+
+      <a-entity gltf-model="#glb1" position="0 0 -1000" scale="400 400 400"></a-entity>
+      <a-entity gltf-model="#glb2" position="0 0 1000" scale="400 400 400"></a-entity>
+      <a-entity gltf-model="#glb3" position="1000 0 0" scale="400 400 400" rotation="0 -90 0"></a-entity>
+      <a-entity gltf-model="#glb4" position="-1000 0 0" scale="400 400 400" rotation="0 90 0"></a-entity>
+
+      <a-entity movement-controls="fly: true; speed: 1.5">
+        <a-entity camera position="0 1.6 5" look-controls></a-entity>
+      </a-entity>
+
+      <a-light type="ambient" intensity="0.8"></a-light>
+      <a-light type="directional" position="-1 4 2" intensity="0.6"></a-light>
+    </a-scene>
+  </body>
+</html>
