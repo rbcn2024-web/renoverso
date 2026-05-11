@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -101,7 +102,7 @@
       <!-- Portal Mundo Anterior -->
       <a-entity position="-6 0 -2" rotation="0 45 0">
         <a-torus radius="1.5" radius-tubular="0.05" color="#4CC3D9"></a-torus>
-        <a-link href="index.html" title="Regresar" image="#portal-tex" visualAspectEnabled="true" position="0 1.5 0"></a-link>
+        <a-link href="mundoanterior.html" title="Regresar" image="#portal-tex" visualAspectEnabled="true" position="0 1.5 0"></a-link>
         <a-text value="MUNDO ANTERIOR" position="0 3.2 0" align="center" width="6"></a-text>
       </a-entity>
 
@@ -112,7 +113,33 @@
         <a-text value="SIGUIENTE NIVEL" position="0 3.2 0" align="center" width="6" color="#FFD700"></a-text>
         <a-text id="msg-final" value="" position="0 4 0" align="center" color="#00ff00"></a-text>
       </a-entity>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- El Entorno: Montañas y cielo futurista -->
+      <a-entity environment="preset: starry; groundColor: #1a1a2e; grid: cross; lighting: point"></a-entity>
 
+      <!-- Los Cristales Monumentales -->
+      <a-cone position="0 10 -15" radius-bottom="2" height="20" color="#4CC3D9" opacity="0.7" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-cone>
+      <a-cone position="-10 5 -10" radius-bottom="1.5" height="12" color="#FF61B0" opacity="0.7" animation="property: position; dir: alternate; to: -10 7 -10; loop: true; dur: 5000"></a-cone>
+      <a-cone position="10 5 -10" radius-bottom="1.5" height="12" color="#FFD700" opacity="0.7" animation="property: position; dir: alternate; to: 10 7 -10; loop: true; dur: 4000"></a-cone>
+
+      <!-- PORTAL DE REGRESO AL INICIO (PIRÁMIDES) -->
+      <a-entity position="0 1 5" rotation="0 180 0">
+        <a-link href="index.html" title="Regresar a las Pirámides" color="#ff0000" visualAspectEnabled="true"></a-link>
+      </a-entity>
+
+      <a-entity position="0 1.6 0" camera look-controls wasd-controls>
+        <a-cursor color="#FF0000"></a-cursor>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
     </a-scene>
   </body>
 </html>
