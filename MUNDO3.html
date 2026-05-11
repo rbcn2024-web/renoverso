@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Metaverso Monumental - Nivel 1</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    
+    <script>
+      // Lógica del Contador de Objetos
+      let count = 0;
+      AFRAME.registerComponent('collectible', {
+        init: function () {
+          this.el.addEventListener('mousedown', () => {
+            count++;
+            document.querySelector('#score').setAttribute('value', 'Cristales: ' + count + ' / 5');
+            this.el.setAttribute('visible', false);
+            this.el.parentNode.removeChild(this.el);
+            
+            if(count >= 5) {
+              document.querySelector('#portal-next').setAttribute('visible', true);
+              document.querySelector('#msg-final').setAttribute('value', '¡Portal Siguiente Activado!');
+            }
+          });
+        }
+      });
+
+      // Lógica de Pintura con Mandos
+      AFRAME.registerComponent('painter', {
+        init: function () {
+          this.el.addEventListener('triggerdown', (evt) => {
+            this.painting = true;
+          });
+          this.el.addEventListener('triggerup', () => {
+            this.painting = false;
+          });
+        },
+        tick: function () {
+          if (this.painting) {
+            var sceneEl = document.querySelector('a-scene');
+            var entityEl = document.createElement('a-sphere');
+            var pos = this.el.object3D.position;
+            entityEl.setAttribute('position', {x: pos.x, y: pos.y, z: pos.z});
+            entityEl.setAttribute('radius', '0.02');
+            entityEl.setAttribute('color', '#00ffcc');
+            sceneEl.appendChild(entityEl);
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Assets -->
+      <a-assets>
+        <img id="portal-tex" src="https://i.imgur.com/w9Xf99u.jpg">
+      </a-assets>
+
+      <!-- Entorno Monumental -->
+      <a-entity environment="preset: dream; groundColor: #1a1a2e; dressingAmount: 50; dressingColor: #4e4e6d; lighting: point; shadow: true;"></a-entity>
+
+      <!-- Iluminación Cinemática -->
+      <a-light type="ambient" intensity="0.5"></a-light>
+      <a-light type="directional" position="-1 10 1" intensity="0.8" castShadow="true"></a-light>
+
+      <!-- Cámara y Controles -->
+      <a-entity id="rig" movement-controls="speed: 0.3;">
+        <a-entity camera position="0 1.6 0" look-controls>
+          <a-cursor color="#00ffcc"></a-cursor>
+          <!-- Contador en el HUD -->
+          <a-text id="score" value="Cristales: 0 / 5" position="-0.5 0.5 -1" scale="0.3" color="#00ffcc"></a-text>
+        </a-entity>
+        
+        <!-- Mandos Quest con función de pintura -->
+        <a-entity laser-controls="hand: left" painter></a-entity>
+        <a-entity laser-controls="hand: right" painter></a-entity>
+      </a-entity>
+
+      <!-- PANEL DE INSTRUCCIONES -->
+      <a-entity position="0 2 -3">
+        <a-plane color="#222" width="4" height="2.5" opacity="0.9"></a-plane>
+        <a-text value="MANUAL DEL EXPLORADOR\n\n1. RECOLECCION: Haz clic en los 5 cristales flotantes\npara activar el portal de salida.\n2. ARTE: Usa el gatillo de tus mandos para pintar\nen el espacio 3D.\n3. PORTALES: Camina hacia el arco azul para volver\no al arco dorado para avanzar." 
+                align="center" position="0 0 0.1" width="3.5" color="white"></a-text>
+      </a-entity>
+
+      <!-- ARQUITECTURA MONUMENTAL -->
+      <!-- Columnas Gigantes -->
+      <a-box position="-10 10 -15" width="4" height="30" depth="4" color="#333"></a-box>
+      <a-box position="10 10 -15" width="4" height="30" depth="4" color="#333"></a-box>
+      <a-box position="0 25 -15" width="24" height="4" depth="4" color="#444"></a-box>
+
+      <!-- OBJETOS RECOLECTABLES (Puntos de Meta) -->
+      <a-octahedron collectible position="-5 1.5 -8" radius="0.4" color="#ff00ff" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-octahedron>
+      <a-octahedron collectible position="5 1.5 -12" radius="0.4" color="#ff00ff" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-octahedron>
+      <a-octahedron collectible position="12 1.5 -5" radius="0.4" color="#ff00ff" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-octahedron>
+      <a-octahedron collectible position="-12 1.5 -5" radius="0.4" color="#ff00ff" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-octahedron>
+      <a-octahedron collectible position="0 4 -10" radius="0.4" color="#ff00ff" animation="property: rotation; to: 0 360 0; loop: true; dur: 3000"></a-octahedron>
+
+      <!-- PORTALES -->
+      <!-- Portal Mundo Anterior -->
+      <a-entity position="-6 0 -2" rotation="0 45 0">
+        <a-torus radius="1.5" radius-tubular="0.05" color="#4CC3D9"></a-torus>
+        <a-link href="index.html" title="Regresar" image="#portal-tex" visualAspectEnabled="true" position="0 1.5 0"></a-link>
+        <a-text value="MUNDO ANTERIOR" position="0 3.2 0" align="center" width="6"></a-text>
+      </a-entity>
+
+      <!-- Portal Mundo Siguiente (Oculto hasta cumplir meta) -->
+      <a-entity id="portal-next" position="6 0 -2" rotation="0 -45 0" visible="false">
+        <a-torus radius="1.5" radius-tubular="0.05" color="#FFD700"></a-torus>
+        <a-link href="mundosiguente.html" title="Avanzar" image="#portal-tex" visualAspectEnabled="true" position="0 1.5 0"></a-link>
+        <a-text value="SIGUIENTE NIVEL" position="0 3.2 0" align="center" width="6" color="#FFD700"></a-text>
+        <a-text id="msg-final" value="" position="0 4 0" align="center" color="#00ff00"></a-text>
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>
